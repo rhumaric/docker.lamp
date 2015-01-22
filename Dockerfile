@@ -1,10 +1,18 @@
 FROM mysql:5.7.5
 MAINTAINER Romaric Pascal <romaric.pascal@gmail.com>
 
+ENV DEBIAN_FRONTEND noninteractive
+
 RUN apt-get update
 
-ENV SUPERVISOR_VERSION=3.0a8-1.1+deb7u1
-RUN apt-get install -y supervisor=${SUPERVISOR_VERSION}
+ENV PYTHON_VERSION=2.7.3-4+deb7u1
+ENV SETUPTOOLS_VERSION=0.6.24-1
+ENV SUPERVISOR_VERSION=3.1.3
+RUN apt-get install -y python=${PYTHON_VERSION} python-setuptools=${SETUPTOOLS_VERSION} \
+    && easy_install supervisor==${SUPERVISOR_VERSION} \
+    && mkdir -p /var/log/supervisor \
+    && ln -s /etc/supervisor/supervisord.conf /etc/supervisord.conf
+
 
 ENV APACHE_VERSION=2.2.22-13+deb7u4
 ENV PHP_VERSION=5.4.36-0+deb7u3
@@ -14,11 +22,11 @@ RUN apt-get install -y apache2=${APACHE_VERSION} php5=${PHP_VERSION} php5-mysql
 # mounting volumes or ADDing content to a child image
 RUN rm -r /var/www/index.html
 
-ADD supervisor/conf.d /etc/supervisor/conf.d
+ADD supervisor /etc/supervisor
 
 EXPOSE 443
 EXPOSE 80
 
 # Run services using supervisor with the nodaemon option
 # so the container stays up
-CMD ["supervisord", "-n"]
+CMD ["supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
