@@ -10,6 +10,10 @@ ENV APACHE_VERSION=2.2.22-13+deb7u4
 ENV PHP_VERSION=5.4.36-0+deb7u3
 RUN apt-get install -y apache2=${APACHE_VERSION} php5=${PHP_VERSION} php5-mysql
 
+# Remove default content from /var/www as its content is intended to be brought
+# mounting volumes or ADDing content to a child image
+RUN rm -r /var/www/index.html
+
 ADD supervisor/conf.d /etc/supervisor/conf.d
 
 EXPOSE 443
