@@ -1,11 +1,11 @@
 <VirtualHost *:80>
   
-  DocumentRoot /var/www
+  DocumentRoot ${APACHE_DOCROOT}
   <Directory />
     Options FollowSymLinks
     AllowOverride None
   </Directory>
-  <Directory /var/www/>
+  <Directory ${APACHE_DOCROOT}>
     Options FollowSymLinks MultiViews
     AllowOverride FileInfo  
     Order allow,deny

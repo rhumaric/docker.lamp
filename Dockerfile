@@ -28,6 +28,8 @@ RUN rm -r /var/www/index.html
 ADD supervisor /etc/supervisor
 ADD apache2 /etc/apache2
 
+ENV APACHE_DOCROOT=/var/www
+
 EXPOSE 443
 EXPOSE 80
 
