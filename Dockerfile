@@ -33,6 +33,10 @@ ENV APACHE_DOCROOT=/var/www
 EXPOSE 443
 EXPOSE 80
 
+# When building containers based on this one, this will copy
+# the `www` folder into the container context
+ONBUILD ADD www /var/www
+
 # Run services using supervisor with the nodaemon option
 # so the container stays up
 CMD ["supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
